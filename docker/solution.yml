@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  mosquitto:
+    container_name: iothub
+    image: eclipse-mosquitto:2
+    ports:
+      - 1883:1883
+      - 8883:8883
+      - 9001:9001
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    networks:
+      - mosquitto
+    restart: unless-stopped
+
+  postgres:
+    container_name: postgres
+    image: postgres:14.0
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mosquitto
+    restart: unless-stopped
+
+networks:
+  mosquitto:
+    name: demeter
+    driver: bridge
+
+volumes:
+  postgres_data:
