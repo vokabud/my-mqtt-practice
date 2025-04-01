@@ -2,7 +2,7 @@
 
 solution.yml is docker compose file, that has all configuration for local development. It includes mosquitto as IoT broker and postgres for data storage.
 
-## Run
+##### Run
 
 `docker-compose -f solution.yml -p demeter_project up -d`
 
@@ -12,6 +12,15 @@ solution.yml is docker compose file, that has all configuration for local develo
 
 mosquitto-dc.yml is docker compose file, that has configuration of Mosquitto
 
-## Run
+##### Run
 
 `docker-compose -f mosquitto-dc.yml -p mosquitto_only up -d`
+
+##### Publish test message from Mosquitto
+
+1. Open cmd from container
+2. Set topic parameter "-t"
+3. Set messege parameter "-m"
+2. Run command:
+
+`mosquitto_pub -h localhost  -p 1883 -t "my/topic" -m "My messege"`
