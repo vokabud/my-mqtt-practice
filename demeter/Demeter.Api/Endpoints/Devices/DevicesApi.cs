@@ -1,4 +1,4 @@
-﻿namespace Demeter.Api.Features.Devices;
+﻿namespace Demeter.Api.Endpoints.Devices;
 
 public record Device(int Id, string Name);
 

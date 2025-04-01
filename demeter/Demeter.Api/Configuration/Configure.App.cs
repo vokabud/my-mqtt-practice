@@ -1,4 +1,4 @@
-﻿using Demeter.Api.Features.Devices;
+﻿using Demeter.Api.Endpoints.Devices;
 
 namespace Demeter.Api.Configuration;
 
