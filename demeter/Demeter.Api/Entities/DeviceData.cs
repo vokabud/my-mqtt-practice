@@ -6,7 +6,9 @@ public class DeviceData
 
     public DateTime Timestamp { get; set; }
 
-    public string Value { get; set; }
+    public string Value { get; set; } = string.Empty;
 
-    public virtual Device Device { get; set; }
+    public Guid DeviceId { get; set; }
+
+    public virtual Device Device { get; set; } = null;
 }

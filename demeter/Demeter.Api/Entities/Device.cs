@@ -8,5 +8,5 @@ public class Device
 
     public string Type { get; set; }
 
-    public virtual ICollection<DeviceData> Data { get; set; }
+    public virtual ICollection<DeviceData> Data { get; set; } = [];
 }

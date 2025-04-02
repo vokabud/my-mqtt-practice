@@ -8,8 +8,11 @@ public static partial class Configure
     {
         var app = builder
             .ConfigureSwagger()
+            .ConfigurePersistence()
             .ConfigureMqttClient()
             .Build();
+
+        app.RunMigrations();
 
         app.UseSwagger();
         app.UseSwaggerUI();
