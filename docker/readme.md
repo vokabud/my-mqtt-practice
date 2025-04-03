@@ -23,4 +23,8 @@ mosquitto-dc.yml is docker compose file, that has configuration of Mosquitto
 3. Set messege parameter "-m"
 2. Run command:
 
-`mosquitto_pub -h localhost  -p 1883 -t "my/topic" -m "My messege"`
+`mosquitto_pub -h localhost  -p 1883 -t "device" -m "My messege"`
+
+Temperature message example:
+
+`mosquitto_pub -h localhost  -p 1883 -t "device" -m "{'device_id':100001,'sensor':'DS18B20','temperature':21.87,'unit':'C','timestamp':1712062745}"`

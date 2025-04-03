@@ -8,4 +8,6 @@ public interface IApplicationDbContext
     DbSet<Device> Devices { get; set; }
 
     DbSet<DeviceData> DeviceData { get; set; }
+
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
