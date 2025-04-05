@@ -1,6 +1,10 @@
-﻿namespace Demeter.Api.Endpoints.Devices;
+﻿using Demeter.Api.Persistence;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-public record Device(int Id, string Name);
+namespace Demeter.Api.Endpoints.Devices;
+
+public record Device(Guid Id, string Name);
 
 public static class DevicesEndpoints
 {
@@ -9,10 +13,13 @@ public static class DevicesEndpoints
         app.MapGet("/devices", GetDevices);
     }
 
-    static IResult GetDevices() => new Random().Next(0, 2) switch
+    static async Task<IResult> GetDevices(
+        [FromServices] IApplicationDbContext dbContext)
     {
-        0 => Results.Ok(new[] { new Device (1, "Device 1" ) }),
-        1 => Results.Ok(new[] { new Device (2, "Device 2" ) }),
-        _ => Results.NotFound()
-    };
+        var devices = await dbContext.Devices
+            .Select(d => new Device(d.Id, d.Name))
+            .ToListAsync();
+
+        return Results.Ok(devices);
+    }
 }

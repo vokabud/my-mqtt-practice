@@ -13,6 +13,8 @@ public static partial class Configure
             .AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+        builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+
         return builder;
     }
 
