@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Demeter.Api.Mqtt;
 using MQTTnet;
 using MQTTnet.Adapter;
 using MQTTnet.Exceptions;
@@ -13,9 +14,14 @@ public class MqttClientService : BackgroundService
     private readonly MqttClientOptions _clientOptions;
     private readonly MqttClientSubscribeOptions _subscriptionOptions;
 
-    public MqttClientService(ILogger<MqttClientService> logger)
+    private readonly IServiceScopeFactory _scopeFactory;
+
+    public MqttClientService(
+        ILogger<MqttClientService> logger,
+        IServiceScopeFactory scopeFactory)
     {
         _logger = logger;
+        _scopeFactory = scopeFactory;
 
         var topic = "device";
 
@@ -92,8 +98,9 @@ public class MqttClientService : BackgroundService
         await base.StopAsync(cancellationToken);
     }
 
-    private Task HandleMessageAsync(MqttApplicationMessageReceivedEventArgs e)
+    private async Task HandleMessageAsync(MqttApplicationMessageReceivedEventArgs e)
     {
+        var topic = e.ApplicationMessage.Topic;
         var payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
 
         _logger.LogInformation("Received application message:");
@@ -101,7 +108,11 @@ public class MqttClientService : BackgroundService
         _logger.LogInformation($"Topic: {e.ApplicationMessage.Topic}");
         _logger.LogInformation($"Payload: {payload}");
 
-        return Task.CompletedTask;
+        using var scope = _scopeFactory.CreateScope();
+
+        var router = scope.ServiceProvider.GetRequiredService<MqttMessageRouter>();
+
+        await router.RouteAsync(topic, payload);
     }
 
     private Task HandleConnectedAsync(MqttClientConnectedEventArgs _)
